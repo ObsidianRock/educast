@@ -57,7 +57,7 @@ class Content(models.Model):
                                                                      'video',
                                                                      'image',
                                                                      'file')})
-    
+
     class Meta:
         ordering = ['order']
 
