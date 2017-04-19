@@ -4,6 +4,8 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin,\
 from django.apps import apps
 
 from django.core.urlresolvers import reverse_lazy
+from django.core.cache import cache
+
 from django.db.models import Count
 
 from django.forms.models import modelform_factory
@@ -218,7 +220,12 @@ class CourseListView(TemplateResponseMixin, View):
     template_name = 'courses/course/list.html'
 
     def get(self, request, subject=None):
-        subjects = Subject.objects.annotate(total_courses=Count('courses'))
+
+        subjects = cache.get('all_subjects')
+
+        if not subjects:
+            subjects = Subject.objects.annotate(total_courses=Count('courses'))
+            cache.set('all_subjects', subjects)
 
         courses = Course.objects.annotate(total_modules=Count('modules'))
 
