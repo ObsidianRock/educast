@@ -18,9 +18,9 @@ urlpatterns = [
         views.SubjectDetailView.as_view(),
         name='subject_detail'),
 
-    url(r'^courses/(?P<pk>\d+)/enroll/$',
-        views.CourseEnrollView.as_view(),
-        name='course_enroll'),
+    #url(r'^courses/(?P<pk>\d+)/enroll/$',
+        #views.CourseEnrollView.as_view(),
+        #name='course_enroll'),
 
     url(r'^', include(router.urls)),
 
