@@ -10,7 +10,8 @@ from rest_framework.decorators import detail_route
 
 from django.shortcuts import get_object_or_404
 
-from .serializers import SubjectSerializer, CourseSerializer
+from .serializers import SubjectSerializer, CourseSerializer, CourseWithContentsSerializer
+from .permissions import IsEnrolled
 
 from ..models import Subject, Course
 
@@ -47,3 +48,10 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
         course = self.get_object()
         course.students.add(request.user)
         return Response({'enrolled': True})
+
+    @detail_route(methods=['get'],
+                  serializer_class=CourseWithContentsSerializer,
+                  authentication_classes=[BasicAuthentication],
+                  permission_classes=[IsAuthenticated, IsEnrolled])
+    def contents(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
